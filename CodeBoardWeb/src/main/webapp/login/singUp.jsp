@@ -97,14 +97,13 @@
 				margin:0px;
 				background:#FAFAFA;
 				font-family:Arial, "돋움", dotum, sans-serif;
+				background: rgb(255,255,255);
 			}
 			section{
 				width:500px;
 				height:730px;
-				background:white;
 				text-align:center;
 				margin:10vh auto;
-				border:1px solid black;
 				border-radius:5px;
 			}
 			form{
@@ -124,6 +123,7 @@
 			}
 			input{
 				height:25px;
+				width: 265px;
 			}
 		
 			input[type=submit]{
@@ -226,16 +226,16 @@
 				<div class="rows">
 					<input type="text" class="birth" name="birth1" id="birth1" placeholder="년(4자)" maxlength="4">&nbsp;
 					<select class="birth2" name="birth2">
-						<option value="0">월</option>
-						<option value="1">1월</option>
-						<option value="2">2월</option>
-						<option value="3">3월</option>
-						<option value="4">4월</option>
-						<option value="5">5월</option>
-						<option value="6">6월</option>
-						<option value="7">7월</option>
-						<option value="8">8월</option>
-						<option value="9">9월</option>
+						<option value="00">월</option>
+						<option value="01">1월</option>
+						<option value="02">2월</option>
+						<option value="03">3월</option>
+						<option value="04">4월</option>
+						<option value="05">5월</option>
+						<option value="06">6월</option>
+						<option value="07">7월</option>
+						<option value="08">8월</option>
+						<option value="09">9월</option>
 						<option value="10">10월</option>
 						<option value="11">11월</option>
 						<option value="12">12월</option>
@@ -257,7 +257,7 @@
 					<span class="check"></span>
 				</div>
 				<div class="rows h">
-					<label for="phone1">연락처<span class="red">*</span></label>
+					<label for="phone1">연락처</label>
 				</div>
 				<div class="rows">
 					<select name="phone1" id="phone1">
