@@ -92,6 +92,7 @@
 				}
 			}
 		</script>
+		<link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
 		<style>
 			body{
 				margin:0px;
@@ -116,11 +117,10 @@
 				font-size:30px;
 				padding:10px 0px;
 				cursor:pointer;
-			}
-			.header:first-letter{
 				font-weight:bold;
-				color:red;
+				text-align: left;
 			}
+			
 			input{
 				height:25px;
 				width: 265px;
@@ -181,9 +181,10 @@
 		</style>
 	</head>
 	<body>
+		<%@ include file="/header.jsp" %>
 		<section>
 			<form name="frm" action="#" method="post">
-				<div class="header">SingUp</div>
+				<div class="header">회원가입</div>
 				<div class="rows h">
 					<label for="id">아이디<span class="red">*</span></label>
 				</div>
@@ -276,5 +277,6 @@
 				</div>
 			</form>
 		</section>
+		<%@ include file="/footer.jsp" %>
 	</body>
 </html>
