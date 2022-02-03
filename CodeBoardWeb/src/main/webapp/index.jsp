@@ -6,6 +6,12 @@
 <meta charset="UTF-8">
 <title>code학습</title>
 <link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		
+	})
+</script>
 </head>
 <body>
 	<%@ include file="/header.jsp" %>

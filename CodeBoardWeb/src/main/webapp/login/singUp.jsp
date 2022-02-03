@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>SingUp</title>
+		<title>회원가입</title>
 		<script>
 			/*function requiredInput(obj){
 				var value = obj.value;
@@ -23,7 +23,6 @@
 				var chk=obj.id;
 				if(chk=="id"){
 					var reg = /^[a-z]+[a-z0-9]{5,15}$/g;
-				}else if(chk=="password"){
 					var reg = /^(?=.*[a-zA-z])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/g;
 				}else if(chk=="name"){
 					var reg = /^[가-힣]/g;
@@ -93,92 +92,7 @@
 			}
 		</script>
 		<link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
-		<style>
-			body{
-				margin:0px;
-				background:#FAFAFA;
-				font-family:Arial, "돋움", dotum, sans-serif;
-				background: rgb(255,255,255);
-			}
-			section{
-				width:500px;
-				height:730px;
-				text-align:center;
-				margin:10vh auto;
-				border-radius:5px;
-			}
-			form{
-				width:55%;
-				height:100%;
-				margin:auto;
-			}
-			.header{
-				margin-top: 30px;
-				font-size:30px;
-				padding:10px 0px;
-				cursor:pointer;
-				font-weight:bold;
-				text-align: left;
-			}
-			
-			input{
-				height:25px;
-				width: 265px;
-			}
-		
-			input[type=submit]{
-				width:100%;
-				height:40px;
-				padding:0px;
-			}
-			.rows{
-				width:100%;
-				text-align:left;
-			}
-			.rows:not(.h){
-				padding-bottom:15px;
-			}
-			div.id{
-				text-align:left;
-			}
-			input[type=text].id{
-				width:177px;
-			}
-			input[type=button].id{
-				width:85px;
-				height:36px;
-				maign-top:2px;
-				margin-bottom:0px;
-			}
-			.birth{
-				width:80px;
-			}
-			.birth2{
-				width:80px;
-				height:30px;
-			}
-			input[type=radio]{
-				width:30px;
-				height:inherit;
-			}
-			#phone1{
-				width:80px;
-				height:30px;
-			}
-			#phone2, #phone3{
-				width:80px;
-			}
-			.red{
-				color:red;
-			}
-			.check{
-				display:none;
-				margin:10px;
-				position:absolute;
-				height:30px;
-				font-size:9pt;
-			}
-		</style>
+		<link href="<%=request.getContextPath()%>/css/singUp.css" rel="stylesheet">
 	</head>
 	<body>
 		<%@ include file="/header.jsp" %>

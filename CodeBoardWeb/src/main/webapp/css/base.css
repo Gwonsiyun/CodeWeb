@@ -1,45 +1,38 @@
 @charset "UTF-8";
-
-body{
-	margin: 0px;
+*{
+	margin:0px;
 	padding: 0px;
 }
 
 header{
-	margin:0px;
-	padding:0px;
-	height:15vh;
+	height:100px;
 	background: lightgray;
 	text-align: center;
+	padding-top: 50px;
 }
 
-
 nav{
-	margin:0px;
-	padding:0px;
-	height:7vh;
+	height:70px;
 	background: skyblue;
 	color: white;
 	text-align: center;
 }
 
 nav>div{
-	margin: 0px;
-	margin-top: 25px;
-	padding: 0px;
 	width:10%;
-	height:7vh;
+	height:70px;
 	display: table-cell;
     vertical-align: middle;
 }
 nav>div>div{
 	display: inline-block;
 	width:10%;
+	height: 7vh;
+	text-align: center;
+	
 }
 
 footer{
-	margin: 0px;
-	padding: 0px;
 	height: 13vh;
 	background: black;
 	color: white;
@@ -60,11 +53,13 @@ section{
 }
 
 .miniBoard{
-	margin: 0px;
-	padding: 0px;
 	width: 40%;
 	height: 400px;
 	border: 1px solid black;
 	display: inline-block;
+}
+a{
+	text-decoration: none;
+	color: black;
 }
 
