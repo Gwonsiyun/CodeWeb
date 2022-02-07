@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+#route{
+	position: relative;
+	border: 1px solid black;
+	width: 100%;
+	height: 70px;
+}
+#detailedRoute{
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 20px;
+}
+#page{
+	display: inline-block;
+	margin-top: 20px;
+	font-size: 2em;
+}

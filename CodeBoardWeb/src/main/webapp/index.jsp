@@ -9,10 +9,10 @@
 <script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
 <script>
 	$(document).ready(function() {
-		//네비의 div클릭시 해당 div의 textcontent를 가져와서 list페이지로 이동하며 데이터를 보내는 쿼리문
+		//네비의 div클릭시 해당 div의 자식 span의 textcontent를 가져와서 list페이지로 이동하며 데이터를 보내는 쿼리문
 		$('nav div div').click(function(){
-			console.log($(this).text());
-			location.href="<%=request.getContextPath()%>/board/list.jsp?type="+$(this).text();
+			console.log($(this).children('span').text());
+			location.href="<%=request.getContextPath()%>/board/list.jsp?type="+$(this).children('span').text();
 		});
 	});
 </script>

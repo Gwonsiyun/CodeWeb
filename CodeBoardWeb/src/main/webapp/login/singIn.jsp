@@ -32,13 +32,13 @@
 <body>
 <%@ include file="/header.jsp" %>
 	<div id="singIn">
-		<form>
+		<form action="singInOk.jsp" method="post">
 			<h2>로그인</h2>
 			<p>
 				<input name="id" type="text" size="30" placeholder="아이디">
 			</p>
 			<p>
-				<input name="pass" type="text" size="30" placeholder="비밀번호">
+				<input name="pass" type="password" size="30" placeholder="비밀번호">
 			</p>
 				<input type="submit" value="로그인">
 		</form>

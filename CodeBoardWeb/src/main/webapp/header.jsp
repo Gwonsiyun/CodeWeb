@@ -14,11 +14,19 @@
 	</div>
 	<% 
 	}else{
+		if(m.getMidx()==1){
 	%>
-	<div class="loginArea">
-		<a href="<%=request.getContextPath()%>/login/SingOut.jsp">로그아웃</a>
-		|
-		<a href="<%=request.getContextPath()%>/login/myPage.jsp">마이페이지</a>
-	</div>
+		<div class="loginArea">
+			<a href="<%=request.getContextPath()%>/login/singOut.jsp">로그아웃</a>
+			|
+			<a href="<%=request.getContextPath()%>/login/myPage.jsp">관리자페이지</a>
+		</div>
+		<%}else{%>
+		<div class="loginArea">
+			<a href="<%=request.getContextPath()%>/login/singOut.jsp">로그아웃</a>
+			|
+			<a href="<%=request.getContextPath()%>/login/myPage.jsp">마이페이지</a>
+		</div>
+		<%} %>
 	<%} %>
 </header>

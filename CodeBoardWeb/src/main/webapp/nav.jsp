@@ -2,20 +2,20 @@
     pageEncoding="UTF-8"%>
 <nav>
 <div>
-	<div>&nbsp;공지사항&nbsp;</div>
+	<div>&nbsp;<span>공지사항</span>&nbsp;</div>
 	|
-	<div>&nbsp;HTML&nbsp;</div>
+	<div>&nbsp;<span>HTML</span>&nbsp;</div>
 	|
-	<div>&nbsp;CSS&nbsp;</div>
+	<div>&nbsp;<span>CSS</span>&nbsp;</div>
 	|
-	<div>&nbsp;JS&nbsp;</div>
+	<div>&nbsp;<span>JS</span>&nbsp;</div>
 	|
-	<div>&nbsp;JAVA&nbsp;</div>
+	<div>&nbsp;<span>JAVA</span>&nbsp;</div>
 	|
-	<div>&nbsp;JSP&nbsp;</div>
+	<div>&nbsp;<span>JSP</span>&nbsp;</div>
 	|	
-	<div>&nbsp;DB&nbsp;</div>
+	<div>&nbsp;<span>DB</span>&nbsp;</div>
 	|
-	<div>&nbsp;QnA&nbsp;</div>
+	<div>&nbsp;<span>QnA</span>&nbsp;</div>
 </div>
 </nav>
