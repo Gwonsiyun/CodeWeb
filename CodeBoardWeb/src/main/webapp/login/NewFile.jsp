@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="cafeWeb.util.*"%>
-<%@ page import="cafeWeb.vo.*"%>
+<%@ page import="boardWeb.util.*"%>
+<%@ page import="boardWeb.vo.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -517,6 +517,9 @@
             document.frm.submit();
          }
       }
+     function inputtext(obj){
+ 		console.log($(obj).attr('name'));
+  	}
 </script>
 </head>
 <body>
@@ -524,24 +527,23 @@
    <section>
       <form name="frm" action="joinOk.jsp" method="post" onsubmit="return false;" id="joinfrm">
          <div id="content">
-            <div class="row_group">
-               <div class=id>
-                  <h3><label for="id">아이디</label></h3>
-                  <input type="text" id="id" name="memberid" maxlength="20" onblur="checkFn('id')"><span></span>
-               </div>
-               <div class=nickname>
-                  <h3><label for="nickname">게임아이디</label></h3>
-                  <input type="text" id="nickname" name="nickname" maxlength="12" onblur="checkFn('nickname')"><span></span>
-               </div>
-               <div class="password">
-                  <h3><label for="pwd1">비밀번호</label></h3>
-                  <input type="password" id="pwd1" name="memberpwd" maxlength="20" onblur="checkFn('pass')"><span></span>
-               </div>
-               <div class="passwordre">
-                  <h3><label for="pwd2">비밀번호 재확인</label></h3>
-                  <input type="password" id="pwd2" name="memberpwdre" maxlength="20" onblur="checkFn('passre')"><span></span>
-               </div>
+            <div class=id>
+               <h3><label for="id">아이디</label></h3>
+               <input type="text" id="id" name="memberid" maxlength="20" onblur="checkFn('id')"><span></span>
             </div>
+            <div class="password">
+               <h3><label for="pwd1">비밀번호</label></h3>
+               <input type="password" id="pwd1" name="memberpwd" maxlength="20" onblur="checkFn('pass')"><span></span>
+            </div>
+            <div class="passwordre">
+               <h3><label for="pwd2">비밀번호 재확인</label></h3>
+               <input type="password" id="pwd2" name="memberpwdre" maxlength="20" onblur="checkFn('passre')"><span></span>
+            </div>
+             <div class=nickname>
+               <h3><label for="nickname">게임아이디</label></h3>
+               <input type="text" id="nickname" name="nickname" maxlength="12" onblur="checkFn('nickname')"><span></span>
+            </div>
+            
             <div class="name">
                <h3><label for="name">이름</label></h3>
                <input type="text" id= "name" name="membername" maxlength="20" onblur="checkFn('name')"><span></span>
@@ -617,9 +619,13 @@
             <div class="join">
                <input type=submit id="btn_join" value="가입하기" onclick="submitFn()">
             </div>
+            <div>
+            <input type="text" id="123" name="123" value="123" onblur="inputtext(this)" size="30">
+            </div>
          </div>
       </form>
    </section>
    <%@ include file="/footer.jsp" %>
 </body>
+
 </html>

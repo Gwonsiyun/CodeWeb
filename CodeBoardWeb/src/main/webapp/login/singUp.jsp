@@ -4,95 +4,86 @@
 <html>
 	<head>
 		<title>회원가입</title>
+		<link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
+		<link href="<%=request.getContextPath()%>/css/singUp.css" rel="stylesheet">
+		<script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 		<script>
-			/*function requiredInput(obj){
-				var value = obj.value;
-				if(value==""){
-					var check = obj.parentElement.getElementsByClassName("check")[0];
-					check.innerHTML = "*필수";
-					check.style.color = "red";
-					check.style.display = "inline";
-				}else{
-					var check = obj.parentElement.getElementsByClassName("check")[0];
-					check.style.display = "none";
+			function maxLengthCheck(obj){
+			    if (obj.value.length > obj.maxLength){
+			      	obj.value = obj.value.slice(0, obj.maxLength);
+			    }    
+		  	}
+			function checkFn(obj){
+				var reg = "";
+				var value = $(obj).val();
+				var name = $(obj).attr("name");
+				var span = $(obj).parent().children('.check');
+				var span2 = $(obj).parent().children('.check2');
+				switch(name){
+					case "id": reg = /^[a-z]+[a-z0-9]{5,15}/g; break;
+					case "password": reg = /^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/; break;
+					case "name": reg = /^[가-힣a-zA-Z]/g; break;
+					case "birth": reg = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/; break;
+					case "email": reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; break;
+					case "phone": reg = /^\d{3}\d{3,4}\d{4}$/; break;
 				}
-			}*/
-			var submitid=[];
-			function reg(obj){
-				var value = obj.value;
-				var chk=obj.id;
-				if(chk=="id"){
-					var reg = /^[a-z]+[a-z0-9]{5,15}$/g;
-					var reg = /^(?=.*[a-zA-z])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/g;
-				}else if(chk=="name"){
-					var reg = /^[가-힣]/g;
-				}else if(chk=="email"){
-					var reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g;
-				}else if(chk=="phone2"){
-					var reg = /^[0-9]{3,4}/g;
-				}else if(chk=="phone3"){
-					var reg = /^[0-9]{4}/g;
-				}else{
-					var reg = "";
-				}
-				var check = obj.parentElement.getElementsByClassName("check")[0];
-				if(value==""){
-					check.innerHTML = "*필수";
-					check.style.color = "red";
-					check.style.display = "inline";
+				if(value == ""){
+					span2.css({"display" : "none"});
+					span.text("필수입력");
+					span.css({"color" : "red", "display" : "inline"});
+					$(obj).css({"border" : "3px solid red"});
 				}else if(!reg.test(value)){
-					check.innerHTML = "*형식에 맞지 않음";
-					check.style.color = "red";
-					check.style.display = "inline";
+					span.css({"display" : "none"});
+					$(obj).css({"border" : "3px solid red"});
+					switch(name){
+						case "id": 
+							span2.text("5~15자 영문 소문자, 숫자를 모두사용하세요.");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+						case "password": 
+							span2.text("8~16자 영문 대 소문자, 숫자, 특수문자를 모두사용하세요.");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+						case "name": 
+							span2.text("한글, 영문사용");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+						case "birth": 
+							span2.text("8자리 숫자만 입력하여 주세요 예)19970813");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+						case "email": 
+							span2.text("이메일양식에 맞지 않습니다.");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+						case "phone": 
+							span2.text("숫자만 입력하여 주세요.");
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+					}
 				}else{
-					check.style.display = "none";
+					span.css({"display" : "none"});
+					span2.css({"display" : "none"});
+					$(obj).css({"border" : "3px solid green"});
 				}
 			}
 			function pass(obj){
-				var value = obj.value;
-				var passValue = document.getElementById("password").value;
-				var check = obj.parentElement.getElementsByClassName("check")[0];
-				if(value==""){
-					check.innerHTML = "*필수";
-					check.style.color = "red";
-					check.style.display = "inline";
-
-				}else if(passValue!=obj.value){
-					check.innerHTML = "*비밀번호가 다릅니다.";
-					check.style.color = "red";
-					check.style.display = "inline";
+				var pass = $('#password').val();
+				var valus = $(obj).val();
+				var span = $(obj).parent().children('.check');
+				var span2 = $(obj).parent().children('.check2');
+				if(valus==""){
+					span2.css({"display" : "none"});
+					$(obj).css({"border" : "3px solid red"});
+					span.text("필수입력");
+					span.css({"color" : "red", "display" : "inline"});
+				}else if(valus!=pass){
+					span.css({"display" : "none"});
+					$(obj).css({"border" : "3px solid red"});
+					span2.text("비밀번호가 다릅니다.");
+					span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
 				}else{
-					check.style.display = "none";
-				}
-			}
-			function result(){
-				var result=[];
-				var check=document.getElementsByClassName("impor");
-				for(var i=0; i<check.length; i++){
-					check[i].focus();
-					check[i].onfocus=function(){
-						if(this.parentElement.getElementsByClassName("check")[0].style.display=="none"){
-							result[i]=true;
-						}else{
-							result[i]=false;
-						}
-					}
-				}
-				console.log(result);
-				var exutable = true;
-				for(var i=0; i<result.length; i++){
-					if(!result[i]){
-						exutable=false;
-						break;
-					}
-				}
-				if(exutable){
-					//document.frm.submit();
+					span.css({"display" : "none"});
+					span2.css({"display" : "none"});
+					$(obj).css({"border" : "3px solid green"});
 				}
 			}
 		</script>
-		<link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
-		<link href="<%=request.getContextPath()%>/css/singUp.css" rel="stylesheet">
+		
 	</head>
 	<body>
 		<%@ include file="/header.jsp" %>
@@ -103,59 +94,49 @@
 					<label for="id">아이디<span class="red">*</span></label>
 				</div>
 				<div class="rows id">
-					<input type="text" class="id impor" name="id" id="id" placeholder="아이디를 입력하세요." onblur="reg(this)">
+					<input type="text" class="id impor" name="id" id="id" placeholder="아이디를 입력하세요." onblur="checkFn(this)">
 					<input type="button" class="id" value="id 중복확인">
-					<span class="check"></span>
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
 					<label for="password">비밀번호<span class="red">*</span></label>
 				</div>
 				
 				<div class="rows">
-					<input type="password" class="impor" name="password" id="password" placeholder="비밀번호를 입력하세요." onblur="reg(this)">
-					<span class="check"></span>
+					<input type="password" class="impor" name="password" id="password" placeholder="8~16자 영문 대 소문자, 숫자, 특수문자를 모두사용하세요." onblur="checkFn(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
 					<label for="passwordre">비밀번호 확인<span class="red">*</span></label>
 				</div>
 				<div class="rows">
 					<input type="password" class="impor" name="passwordre" id="passwordre" placeholder="비밀번호를 다시 입력하세요." onblur="pass(this)">
-					<span class="check"></span>
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
 					<label for="nickName">닉네임<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<input type="text" name="nickName">
+					<input type="text" name="nickName" placeholder="한글및 영어" onblur="checkFn(this)">
 				</div>
 				<div class="rows h">
 					<label for="name">이름<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<input type="text" class="impor" name="name" id="name" placeholder="이름을 입력하세요." onblur="reg(this)">
-					<span class="check"></span>
+					<input type="text" class="impor" name="name" id="name" placeholder="이름을 입력하세요." onblur="checkFn(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
-					<label for="birth1">생년월일</label>
+					<label for="birth">생년월일<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<input type="text" class="birth" name="birth1" id="birth1" placeholder="년(4자)" maxlength="4">&nbsp;
-					<select class="birth2" name="birth2">
-						<option value="00">월</option>
-						<option value="01">1월</option>
-						<option value="02">2월</option>
-						<option value="03">3월</option>
-						<option value="04">4월</option>
-						<option value="05">5월</option>
-						<option value="06">6월</option>
-						<option value="07">7월</option>
-						<option value="08">8월</option>
-						<option value="09">9월</option>
-						<option value="10">10월</option>
-						<option value="11">11월</option>
-						<option value="12">12월</option>
-					</select>&nbsp;
-					<input type="text" class="birth" name="birth3" id="birth3" placeholder="일">
+					<input type="number" class="impor" name="birth" id="birth" placeholder="8자리 숫자만 입력하여주세요" maxlength="8" onblur="checkFn(this)" oninput="maxLengthCheck(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
 					<label for="gender">성별</label>
@@ -168,25 +149,23 @@
 					<label for="email">이메일<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<input type="email" class="impor" name="email" id="email" placeholder="이메일을 입력하세요" onblur="reg(this)">
-					<span class="check"></span>
+					<input type="email" class="impor" name="email" id="email" placeholder="이메일을 입력하세요" onblur="checkFn(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
-					<label for="phone1">연락처</label>
+					<label for="phone">연락처<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<select name="phone1" id="phone1">
-						<option value="010">010</option>
-						<option value="010">011</option>
-						<option value="010">016</option>
-					</select>&nbsp;
-					<input type="text" class="impor" name="phone2" id="phone2" placeholder="연락처2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" onblur="reg(this)">&nbsp;
-					<input type="text" class="impor" name="phone3" id="phone3" placeholder="연락처3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" onblur="reg(this)">
-					<span class="check"></span>
+					<input type="text" class="impor" name="phone" id="phone" placeholder="숫자만 입력하여주세요" maxlength="11" onblur="checkFn(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows">
 					<label>
 						<input type="submit" value="회원가입" onclick="result();return false">
+						<span class="check"></span><br>
+						<span class="check2"></span>
 					</label>
 				</div>
 			</form>
