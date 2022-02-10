@@ -14,7 +14,7 @@
 	try{
 		conn = DBManager.getConnection();
 		
-		String sql = " select * from member where id=? and pass=?";
+		String sql = " select * from member where id=? and pass=? and delyn='N'";
 		
 		psmt = conn.prepareStatement(sql);
 		psmt.setString(1,id);

@@ -8,6 +8,14 @@
 		<link href="<%=request.getContextPath()%>/css/singUp.css" rel="stylesheet">
 		<script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 		<script>
+			var checkid = false;
+			var checkpassword = false;
+			var checkpasswordre = false;
+			var checkname = false;
+			var checkbirth = false;
+			var checkemail = false;
+			var checkphone = false;
+
 			function maxLengthCheck(obj){
 			    if (obj.value.length > obj.maxLength){
 			      	obj.value = obj.value.slice(0, obj.maxLength);
@@ -23,7 +31,8 @@
 					case "id": reg = /^[a-z]+[a-z0-9]{5,15}/g; break;
 					case "password": reg = /^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/; break;
 					case "name": reg = /^[가-힣a-zA-Z]/g; break;
-					case "birth": reg = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/; break;
+					case "nickName": reg = /^[가-힣a-zA-Z]/g; break;
+					case "birth": reg = /^(19[0-9][0-9]|20\d{2})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/; break;
 					case "email": reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; break;
 					case "phone": reg = /^\d{3}\d{3,4}\d{4}$/; break;
 				}
@@ -32,33 +41,85 @@
 					span.text("필수입력");
 					span.css({"color" : "red", "display" : "inline"});
 					$(obj).css({"border" : "3px solid red"});
+					switch(name){
+						case "id": 
+							checkid = false; 
+							break;
+						case "password": 
+							checkpassword = false; 
+							break;
+						case "name": 
+							checkname = false; 
+							break;
+						case "birth": 
+							checkbirth = false; 
+							break;
+						case "email": 
+							checkemail = false; 
+							break;
+						case "phone": 
+							checkphone = false; 
+							break;
+					}
 				}else if(!reg.test(value)){
 					span.css({"display" : "none"});
 					$(obj).css({"border" : "3px solid red"});
 					switch(name){
 						case "id": 
 							span2.text("5~15자 영문 소문자, 숫자를 모두사용하세요.");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkid = false; 
+							break;
 						case "password": 
 							span2.text("8~16자 영문 대 소문자, 숫자, 특수문자를 모두사용하세요.");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkpassword = false; 
+							break;
 						case "name": 
 							span2.text("한글, 영문사용");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkname = false; 
+							break;
 						case "birth": 
 							span2.text("8자리 숫자만 입력하여 주세요 예)19970813");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkbirth = false; 
+							break;
 						case "email": 
 							span2.text("이메일양식에 맞지 않습니다.");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkemail = false; 
+							break;
 						case "phone": 
 							span2.text("숫자만 입력하여 주세요.");
-							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"}); break;
+							span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+							checkphone = false; 
+							break;
 					}
 				}else{
 					span.css({"display" : "none"});
 					span2.css({"display" : "none"});
 					$(obj).css({"border" : "3px solid green"});
+					switch(name){
+						case "id": 
+							checkid = true; 
+							break;
+						case "password": 
+							checkpassword = true; 
+							break;
+						case "name": 
+							checkname = true; 
+							break;
+						case "birth": 
+							checkbirth = true; 
+							break;
+						case "email": 
+							checkemail = true; 
+							break;
+						case "phone": 
+							checkphone = true; 
+							break;
+					}
 				}
 			}
 			function pass(obj){
@@ -71,24 +132,35 @@
 					$(obj).css({"border" : "3px solid red"});
 					span.text("필수입력");
 					span.css({"color" : "red", "display" : "inline"});
+					checkpasswordre = false;
 				}else if(valus!=pass){
 					span.css({"display" : "none"});
 					$(obj).css({"border" : "3px solid red"});
 					span2.text("비밀번호가 다릅니다.");
 					span2.css({"color" : "red", "display" : "inline", "font-size" : "0.5em"});
+					checkpasswordre = false;
 				}else{
 					span.css({"display" : "none"});
 					span2.css({"display" : "none"});
 					$(obj).css({"border" : "3px solid green"});
+					checkpasswordre = true;
 				}
 			}
+			function singUp(){
+				if(!checkid||!checkpassword||!checkpasswordre||!checkname||!checkbirth||!checkemail||!checkphone){
+					$('.impor').blur();
+				}else{
+					$('form').submmit();
+				}
+			}
+			
 		</script>
 		
 	</head>
 	<body>
 		<%@ include file="/header.jsp" %>
 		<section>
-			<form name="frm" action="#" method="post">
+			<form name="frm" action="singUpOk.jsp" method="post">
 				<div class="header">회원가입</div>
 				<div class="rows h">
 					<label for="id">아이디<span class="red">*</span></label>
@@ -120,7 +192,9 @@
 					<label for="nickName">닉네임<span class="red">*</span></label>
 				</div>
 				<div class="rows">
-					<input type="text" name="nickName" placeholder="한글및 영어" onblur="checkFn(this)">
+					<input type="text" class="impor" name="nickName" placeholder="한글및 영어" onblur="checkFn(this)">
+					<span class="check"></span><br>
+					<span class="check2"></span>
 				</div>
 				<div class="rows h">
 					<label for="name">이름<span class="red">*</span></label>
@@ -163,9 +237,7 @@
 				</div>
 				<div class="rows">
 					<label>
-						<input type="submit" value="회원가입" onclick="result();return false">
-						<span class="check"></span><br>
-						<span class="check2"></span>
+						<input type="submit" value="회원가입" onclick="singUp();return false">
 					</label>
 				</div>
 			</form>
