@@ -16,7 +16,7 @@
 	try{
 		conn = DBManager.getConnection();
 		
-		String sql = " select type_ from board group by type_ ";
+		String sql = " select type_ from board a group by type_ ";
 		
 		psmt = conn.prepareStatement(sql);
 		rs = psmt.executeQuery();
@@ -26,7 +26,7 @@
 			count++;
 		}
 		
-		sql = " select * from board";
+		sql = " select a.* from board a";
 		
 		psmt = conn.prepareStatement(sql);
 		rs = psmt.executeQuery();

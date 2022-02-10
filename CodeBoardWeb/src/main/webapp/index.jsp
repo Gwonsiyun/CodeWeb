@@ -4,7 +4,10 @@
 <%@ page import="boardWeb.util.*" %>
 <%@ page import="java.util.*" %>
 <%
-
+	int rownum = 0;
+	String title = "";
+	String nickname ="";
+	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
 	ResultSet rs	= null;
@@ -24,13 +27,6 @@
 			board_type.add(rs.getString("type_"));
 			count++;
 		}
-		
-		sql = " select ? from board";
-		psmt = conn.prepareStatement(sql);
-		for(String type : board_type){
-		psmt.setString(1,type);
-		rs = psmt.executeQuery();
-		}
 	
 
 %>
@@ -40,6 +36,15 @@
 <meta charset="UTF-8">
 <title>code학습</title>
 <link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/css/table.css" rel="stylesheet">
+<style>
+	#type{
+		height: 50px;
+	}
+	#miniBoard_content{
+		height: 350px;
+	}
+</style>
 <script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
 <script>
 	$(document).ready(function() {
@@ -50,9 +55,7 @@
 			location.href="<%=request.getContextPath()%>/board/list.jsp?type="+$(this).children('span').text();
 		});
 	});
-	function(){
-		
-	}
+	
 </script>
 </head>
 <body>
@@ -81,18 +84,45 @@
 		<!-- 게시판타입마다 미니게시판을 만들어주고 게시판 이름 클릭시 해당하는 게시판으로 이동 -->
 		<%for(String type : board_type){%>
 			<div class="miniBoard">
-				<div><%=type %></div>
-				<div>
-				<div></div>
+				<div id="type"><%=type %></div>
+				<div id="miniBoard_content">
+				<%
+					sql = " select rownum r, a.* from board a where type_ = ? and delyn='N'";
+					psmt = conn.prepareStatement(sql);
+					psmt.setString(1,type);
+					
+					rs = psmt.executeQuery(); 
+					
+					count = 0;
+					while(rs.next()){
+						rownum=rs.getInt("R");
+						title = rs.getString("TITLE");
+						nickname = rs.getString("NICKNAME");
+						count++;
+					}
+					System.out.println(title);
+				%>
+					<table>
+						<thead>
+							<tr>
+								<th>글번호</th>
+								<th>제목</th>
+								<th>작성자</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%for(int i=0; i<=count; i++){%>
+								<tr>
+									<td><%=rownum %></td>
+									<td><%=title %></td>
+									<td><%=nickname %></td>
+								<tr>
+							<% }%>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		<% }%>
-			
-			<div class="miniBoard"></div>
-			<div class="miniBoard"></div>
-			<div class="miniBoard"></div>
-			<div class="miniBoard"></div>
-			<div class="miniBoard"></div>
 		</div>
 	</section>
 	<%@ include file="/footer.jsp" %>

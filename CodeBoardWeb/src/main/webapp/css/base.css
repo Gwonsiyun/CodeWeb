@@ -30,7 +30,7 @@ nav{
 section{
 	display: inline-block;
 	width: 80%;
-	height:1300px;
+	height:auto;
 }
 
 footer{
