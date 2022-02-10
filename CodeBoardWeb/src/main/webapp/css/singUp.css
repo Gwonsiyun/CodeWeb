@@ -6,7 +6,6 @@ body{
 	background: rgb(255,255,255);
 }
 section{
-	width:800px;
 	height:730px;
 	text-align:center;
 	margin:10vh auto;
@@ -28,6 +27,7 @@ form{
 }
 
 input{
+	border-radius: 5px;
 	height:25px;
 	width: 400px;
 }
