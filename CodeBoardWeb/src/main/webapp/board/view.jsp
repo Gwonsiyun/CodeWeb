@@ -14,6 +14,7 @@
 	String searchValue = request.getParameter("searchValue");
 	
 	String bidx= request.getParameter("bidx");
+	String type_= request.getParameter("type");
 	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
@@ -34,16 +35,18 @@
 		
 		conn = DBManager.getConnection();
 		
-		String sql = " select * from board where bidx = "+bidx;
+		String sql = " SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c WHERE bidx = "+bidx;
+		
 		
 		psmt = conn.prepareStatement(sql);
+		psmt.setString(1,type_);
 		rs = psmt.executeQuery();
 		
 		if(rs.next()){
 			title_ = rs.getString("title");
 			nickname_ = rs.getString("nickname");
 			content_ = rs.getString("content");
-			bidx_ = rs.getInt("bidx");
+			bidx_ = rs.getInt("r");
 			midx_ = rs.getInt("midx");
 		}
 		
@@ -96,8 +99,9 @@
 </head>
 <body>
 	<%@ include file="/header.jsp" %>
+	<%@ include file="/route.jsp" %>
 	<section>
-		<h2>게시글 상세조회</h2>
+	
 		<article>
 			<table border="1" width="70%">
 				<tr>
@@ -125,6 +129,18 @@
 			</form>
 			
 			<div class="replyArea">
+				<div class="replyInput">
+					<form name="reply">
+						<p>
+							<label>
+								댓글 : <input type="text" size="50" name="rcontent">
+							</label>
+						</p>
+						<p>
+							<input onclick="replyFn()" type="button" value="저장">
+						</p>
+					</form>
+				</div>
 				<div class="replyList">
 				<table border="1" name=reply>
 					<tbody id="reply">
@@ -145,18 +161,7 @@
 				</table>
 				</div>
 			
-				<div class="replyInput">
-					<form name="reply">
-						<p>
-							<label>
-								내용 : <input type="text" size="50" name="rcontent">
-							</label>
-						</p>
-						<p>
-							<input onclick="replyFn()" type="button" value="저장">
-						</p>
-					</form>
-				</div>
+				
 				
 			</div>
 			

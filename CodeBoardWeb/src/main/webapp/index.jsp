@@ -4,13 +4,16 @@
 <%@ page import="boardWeb.util.*" %>
 <%@ page import="java.util.*" %>
 <%
-	int rownum = 0;
-	String title = "";
-	String nickname ="";
 	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
 	ResultSet rs	= null;
+	ResultSet rsBoard = null;
+	
+	int rownum = 0;
+	String title = "";
+	String nickname ="";
+	
 	
 	ArrayList<String> arrayList = new ArrayList<>();
 	List<String> board_type = arrayList ;
@@ -38,12 +41,7 @@
 <link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/table.css" rel="stylesheet">
 <style>
-	#type{
-		height: 50px;
-	}
-	#miniBoard_content{
-		height: 350px;
-	}
+	
 </style>
 <script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
 <script>
@@ -86,22 +84,7 @@
 			<div class="miniBoard">
 				<div id="type"><%=type %></div>
 				<div id="miniBoard_content">
-				<%
-					sql = " select rownum r, a.* from board a where type_ = ? and delyn='N'";
-					psmt = conn.prepareStatement(sql);
-					psmt.setString(1,type);
-					
-					rs = psmt.executeQuery(); 
-					
-					count = 0;
-					while(rs.next()){
-						rownum=rs.getInt("R");
-						title = rs.getString("TITLE");
-						nickname = rs.getString("NICKNAME");
-						count++;
-					}
-					System.out.println(title);
-				%>
+				
 					<table>
 						<thead>
 							<tr>
@@ -111,13 +94,39 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%for(int i=0; i<=count; i++){%>
-								<tr>
-									<td><%=rownum %></td>
-									<td><%=title %></td>
-									<td><%=nickname %></td>
-								<tr>
-							<% }%>
+						<%
+							ArrayList<Board> miniBoard = new ArrayList<>();
+						
+							sql = "SELECT e.* FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e WHERE rr <= 5 ";
+							psmt = conn.prepareStatement(sql);
+							psmt.setString(1,type);
+							
+							rsBoard = psmt.executeQuery(); 
+							
+							while(rsBoard.next()){
+								Board temp = new Board();
+								temp.setBidx(rsBoard.getInt("bidx"));
+								temp.setMidx(rsBoard.getInt("midx"));
+								temp.setType(rsBoard.getString("type_"));
+								temp.setTitle(rsBoard.getString("title"));
+								temp.setContent(rsBoard.getString("content"));
+								temp.setNickname(rsBoard.getString("nickname"));
+								temp.setCreateddate(rsBoard.getString("createddate"));
+								temp.setRnum(rsBoard.getInt("r"));
+								
+								
+								miniBoard.add(temp);
+								
+							}
+						%>
+						
+						<%for(Board b : miniBoard){%>
+							<tr>
+								<td><%=b.getRnum() %></td>
+								<td><%=b.getTitle() %></td>
+								<td><%=b.getNickname() %></td>
+							<tr>
+						<% }%>
 						</tbody>
 					</table>
 				</div>
@@ -133,6 +142,7 @@
 		e.printStackTrace();
 	}finally{
 		DBManager.close(psmt,conn,rs);
+		if(rsBoard!=null)rsBoard.close();
 	} 
 	
 %>

@@ -28,9 +28,10 @@ nav{
 }
 
 section{
-	display: inline-block;
-	width: 80%;
+
+	width: 70%;
 	height:auto;
+	margin:auto;
 }
 
 footer{

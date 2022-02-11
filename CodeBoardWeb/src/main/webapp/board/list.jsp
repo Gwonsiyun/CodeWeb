@@ -13,6 +13,8 @@
 	ArrayList<String> arrayList = new ArrayList<>();
 	List<String> board_type = arrayList ;
 	int count = 0;
+	
+	ArrayList<Board> board = new ArrayList<>();
 	try{
 		conn = DBManager.getConnection();
 		
@@ -26,12 +28,27 @@
 			count++;
 		}
 		
-		sql = " select a.* from board a";
+		sql = " SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e WHERE rr <= 5";
 		
 		psmt = conn.prepareStatement(sql);
+		psmt.setString(1,type_);
 		rs = psmt.executeQuery();
 		
-	
+		while(rs.next()){
+			Board temp = new Board();
+			temp.setBidx(rs.getInt("bidx"));
+			temp.setMidx(rs.getInt("midx"));
+			temp.setType(rs.getString("type_"));
+			temp.setTitle(rs.getString("title"));
+			temp.setContent(rs.getString("content"));
+			temp.setNickname(rs.getString("nickname"));
+			temp.setCreateddate(rs.getString("dt"));
+			temp.setRnum(rs.getInt("r"));
+			
+			
+			board.add(temp);
+			
+		}
 
 %>
 <!DOCTYPE html>
@@ -48,7 +65,7 @@
 <body>
 	<%@ include file="/header.jsp" %>
 	<%@ include file="/nav.jsp" %>
-	<%@ include file="/board/route.jsp" %>
+	<%@ include file="/route.jsp" %>
 	<section>
 	<div id="search">
 		<form>
@@ -72,12 +89,12 @@
 			</tr>
 		</thead>
 		<tbody>
-		<%while(rs.next()){%>
+		<%for(Board b : board){%>
 			<tr>
-				<td><%=rs.getInt("bidx") %></td>
-				<td><a href="view.jsp?bidx=<%=rs.getInt("bidx") %>"><%=rs.getString("title") %></a></td>
-				<td><%=rs.getString("nickname") %></td>
-				<td><%=rs.getString("createddate") %></td>
+				<td><%=b.getRnum() %></td>
+				<td><a href="view.jsp?bidx=<%=b.getBidx() %>&type=<%=b.getType()%>"><%=b.getTitle() %></a></td>
+				<td><%=b.getNickname() %></td>
+				<td><%=b.getCreateddate() %></td>
 			</tr>
 		<%}%>	
 		</tbody>
