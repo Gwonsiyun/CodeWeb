@@ -27,9 +27,9 @@
 			
 			m = new Member();
 			m.setMidx(rs.getInt("midx"));
-			m.setMemberid(rs.getString("id"));
-			m.setMembername(rs.getString("nickname"));
-			
+			m.setId(rs.getString("id"));
+			m.setNickname(rs.getString("nickname"));
+			m.setGrade(rs.getString("grade"));
 			session.setAttribute("loginUser",m);
 			
 		}

@@ -2,33 +2,32 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="boardWeb.vo.*" %>
+<%@ page import="boardWeb.util.*" %>
 <%
 	Member login = (Member)session.getAttribute("loginUser");
 %>
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	String subject = request.getParameter("subject");
-	String writer  = request.getParameter("writer");
-	String content  = request.getParameter("content");
-	
-	String url	= "jdbc:oracle:thin:@localhost:1522:xe";
-	String user	= "system";
-	String pass	= "1234";
+	String title_ = request.getParameter("title");
+	String content_  = request.getParameter("content");
+	String type_  = request.getParameter("type");
+
 	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
 	
 	try{
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		conn = DriverManager.getConnection(url,user,pass);
+		conn = DBManager.getConnection();
 		
-		String sql= " insert into board(bidx,subject,writer,content,midx) values(bidx_seq.nextval,?,?,?,?)";
+
+		String sql= " insert into board(type_,bidx,title,content,nickname,midx) values('"+type_+"',bidx_seq.nextval,?,?,?,?)";
+
 		
 		psmt = conn.prepareStatement(sql);
-		psmt.setString(1,subject);
-		psmt.setString(2,writer);
-		psmt.setString(3,content);
+		psmt.setString(1,title_);
+		psmt.setString(2,content_);
+		psmt.setString(3,login.getNickname());
 		psmt.setInt(4,login.getMidx());
 		
 		int result = psmt.executeUpdate();

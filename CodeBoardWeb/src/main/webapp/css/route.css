@@ -1,19 +1,17 @@
 @charset "UTF-8";
 
 #route{
-	position: relative;
-	width: 80%;
+	width: 70%;
+	height:auto;
+	margin:auto;
 	height: 70px;
 }
 #detailedRoute{
-	display: inline-block;
-	position: absolute;
+	float: right;
 	top: 0;
 	right: 0;
-	padding: 20px;
 }
 #page{
-	display: inline-block;
-	margin-top: 20px;
+	padding-top: 30px;
 	font-size: 2em;
 }

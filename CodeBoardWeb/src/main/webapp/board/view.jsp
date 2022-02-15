@@ -119,9 +119,9 @@
 					<td colspan="3"><%=content_ %></td>
 				</tr>
 			</table>
-			<button type="button" onclick="location.href='list.jsp?searchType=<%=searchType%>&searchValue=<%=searchValue%>'">목록</button>
+			<button type="button" onclick="location.href='list.jsp?type=<%=type_%>&searchType=<%=searchType%>&searchValue=<%=searchValue%>'">목록</button>
 			<%if(user_!= null && user_.getMidx() == midx_){ %>
-			<button type="button" onclick="location.href='modify.jsp?bidx=<%=bidx_%>&searchType=<%=searchType%>&searchValue=<%=searchValue%>'">수정</button>
+			<button type="button" onclick="location.href='modify.jsp?bidx=<%=bidx%>&type=<%=type_%>&searchType=<%=searchType%>&searchValue=<%=searchValue%>'">수정</button>
 			<button type="button" onclick="deleteFn()">삭제</button>
 			<%} %>
 			<form name="frm" method="post">

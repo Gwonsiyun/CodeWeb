@@ -40,9 +40,6 @@
 <title>code학습</title>
 <link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/table.css" rel="stylesheet">
-<style>
-	
-</style>
 <script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
 <script>
 	$(document).ready(function() {
@@ -61,7 +58,7 @@
 	<%@ include file="/nav.jsp" %>
 	<section>
 		<div id="search">
-			<form>
+			<form action="<%=request.getContextPath()%>/board/list.jsp">
 				<select name="board_searchType">
 					<option value="all">전체</option>
 					<%for(String type : board_type){%>

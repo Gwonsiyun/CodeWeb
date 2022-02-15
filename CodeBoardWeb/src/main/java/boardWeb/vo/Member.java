@@ -2,16 +2,16 @@ package boardWeb.vo;
 
 public class Member {
 	
-	private String memberid;
-	private String memberpwd;
-	private String membername;
+	private String id;
+	private String pass;
+	private String nickname;
 	private String gender;
 	private String addr;
 	private String age;
 	private String phone;
 	private String email;
 	private int midx;
-	
+	private String grade;
 	
 	public int getMidx() {
 		return midx;
@@ -20,23 +20,24 @@ public class Member {
 		this.midx = midx;
 	}
 	
-	public String getMemberid() {
-		return memberid;
+
+	public String getId() {
+		return id;
 	}
-	public void setMemberid(String memberid) {
-		this.memberid = memberid;
+	public void setId(String id) {
+		this.id = id;
 	}
-	public String getMemberpwd() {
-		return memberpwd;
+	public String getPass() {
+		return pass;
 	}
-	public void setMemberpwd(String memberpwd) {
-		this.memberpwd = memberpwd;
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
-	public String getMembername() {
-		return membername;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setMembername(String membername) {
-		this.membername = membername;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public String getGender() {
 		return gender;
@@ -67,6 +68,12 @@ public class Member {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 	
 	
