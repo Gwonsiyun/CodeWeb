@@ -71,7 +71,7 @@
 					<option value="title_content">제목+내용</option>
 					<option value="nickname">작성자</option>
 				</select>
-				<input type="text" name="type" size="30">
+				<input type="text" name="searchVal" size="30">
 				<button>검색</button>
 			</form>
 		</div>

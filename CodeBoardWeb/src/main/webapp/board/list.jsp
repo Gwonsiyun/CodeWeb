@@ -8,9 +8,15 @@
 	Member login = (Member)session.getAttribute("loginUser");
 %>
 <%
-
+	String board_searchType= request.getParameter("board_searchType");
 	String post_searchType= request.getParameter("post_searchType");
+	String searchVal= request.getParameter("searchVal");
 	String type_ = request.getParameter("type");
+	System.out.println(board_searchType);
+	System.out.println(post_searchType);
+	System.out.println(searchVal);
+	System.out.println(type_);
+	
 	if(type_==null||type_==""){
 		type_="all";
 	}
@@ -38,11 +44,13 @@
 			board_type.add(rs.getString("type_"));
 			count++;
 		} */
-		if(type_.equals("all")){
-			sql = "select c.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt from (SELECT ROWNUM r,b.* FROM board b where delyn = 'N' order by bidx desc) c";
-			
+		if(board_searchType!=null){
+			sql = " SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
 			psmt = conn.prepareStatement(sql);
-			
+			psmt.setString(1,board_searchType);
+		}else if(type_.equals("all")){
+			sql = "select c.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt from (SELECT ROWNUM r,b.* FROM board b where delyn = 'N' order by bidx desc) c";
+			psmt = conn.prepareStatement(sql);
 		}else{
 			sql = " SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
 			
@@ -87,7 +95,18 @@
 <link href="<%=request.getContextPath()%>/css/base.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/route.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/table.css" rel="stylesheet">
-
+<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		
+		//네비의 div클릭시 해당 div의 자식 span의 textcontent를 가져와서 list페이지로 이동하며 데이터를 보내는 쿼리문
+		$('nav div div').click(function(){
+			console.log($(this).children('span').text());
+			location.href="<%=request.getContextPath()%>/board/list.jsp?type="+$(this).children('span').text();
+		});
+	});
+	
+</script>
 </head>
 <body>
 	<%@ include file="/header.jsp" %>
