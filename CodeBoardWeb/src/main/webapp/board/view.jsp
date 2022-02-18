@@ -50,7 +50,7 @@
 			midx_ = rs.getInt("midx");
 		}
 		
-		sql = "select * from reply r, member m WHERE r.midx = m.midx AND r.bidx = "+bidx;
+		sql = "select * from reply r, member m WHERE r.midx = m.midx AND r.bidx = "+bidx+ "ORDER BY r.RIDX";
 		
 		psmtReply = conn.prepareStatement(sql);
 		
@@ -64,9 +64,21 @@
 			reply.setBidx(rsReply.getInt("bidx"));
 			reply.setMidx(rsReply.getInt("midx"));
 			reply.setRidx(rsReply.getInt("ridx"));
-			reply.setRcontent(rsReply.getString("rcontent"));
-			reply.setRdate(rsReply.getString("rdate"));
-			reply.setMembername(rsReply.getString("membername"));
+			if(rsReply.getString("delyn").equals("N")){
+				reply.setRcontent(rsReply.getString("content"));
+			}else{
+				reply.setRcontent("삭제된 댓글입니다.");
+			}
+			reply.setRdate(rsReply.getString("createddate"));
+			reply.setNickname(rsReply.getString("nickname"));
+			if(rsReply.getString("changeyn").equals("Y") && rsReply.getString("delyn").equals("N")){
+				reply.setChangeyn("(수정됨)");
+			}else{
+				reply.setChangeyn("");
+			}
+			
+			reply.setDelyn(rsReply.getString("delyn"));
+
 			
 			rList.add(reply);
 		}
@@ -124,9 +136,6 @@
 			<button type="button" onclick="location.href='modify.jsp?bidx=<%=bidx%>&type=<%=type_%>&searchType=<%=searchType%>&searchValue=<%=searchValue%>'">수정</button>
 			<button type="button" onclick="deleteFn()">삭제</button>
 			<%} %>
-			<form name="frm" method="post">
-				<input type="hidden" name="bidx" value="<%=bidx_%>">
-			</form>
 			
 			<div class="replyArea">
 				<div class="replyInput">
@@ -137,22 +146,22 @@
 							</label>
 						</p>
 						<p>
-							<input onclick="replyFn()" type="button" value="저장">
+							<input onclick="replyFn(this)" type="button" value="등록">
 						</p>
 					</form>
 				</div>
 				<div class="replyList">
-				<table border="1" name=reply>
+				<table name=reply>
 					<tbody id="reply">
 					<%for(Reply r : rList){%>
 						<tr>
-							<td><%=r.getMembername() %> : </td>
-							<td><%=r.getRcontent() %></td>
-							<% if(user_!=null && user_.getMidx()== r.getMidx()){%>
+							<td><%=r.getNickname() %> : </td>
+							<td class="recon"><%=r.getRcontent()%></td>
+							<td class="changeyn"><%=r.getChangeyn() %></td>
+							<% if(user_!=null && user_.getMidx()== r.getMidx() && r!=null && r.getDelyn().equals("N")){%>
 							<td>
 								<input type="button" onclick='modify(<%=r.getRidx()%>,this)' value="수정">
 								<input type="button" onclick='deleteReply(<%=r.getRidx()%>,this)' value="삭제" >
-								
 							</td>
 							<%} %>
 						</tr>
@@ -172,25 +181,25 @@
 	<%@ include file="/footer.jsp" %>
 	<script>//외부로 빼서 사용(보안상의 이유 삭제페이지정보가 넘어가면 안됨)
 		function deleteFn(){
-			document.frm.action="deleteOk.jsp";
-			document.frm.submit();
+			location.href="deleteOk.jsp?bidx=<%=bidx%>";
 		}
-		function replyFn(){
+		function replyFn(obj){
 			<%if(user_ != null){%>
 				$.ajax({
 					url : "<%=request.getContextPath()%>/reply/Insert.jsp",
 					type : "post",
 					data : $("form[name=reply]").serialize()+"&midx="+<%=user_.getMidx()%>+"&bidx="+<%=bidx%>,
 					success : function(data){
-						console.log(data);
 						var json = JSON.parse(data.trim());
 						var html="";
 						html += "<tr>";
-						html += "<td>"+json[0].membername+"</td>";
-						html += "<td>"+json[0].rcontent+"</td>";
-						html += "<td><input type='button' value='저장' onclick='modify("+json[0].ridx+",this)'> <input type='button' value='삭제' onclick='deleteReply("+json[0].ridx+",this)'></td>";
+						html += "<td>"+json[0].nickname+" : </td>";
+						html += "<td class='recon'>"+json[0].rcontent+"<span></span></td>";
+						html += "<td></td>";
+						html += "<td><input type='button' value='수정' onclick='modify("+json[0].ridx+",this)'> <input type='button' value='삭제' onclick='deleteReply("+json[0].ridx+",this)'></td>";
 						html += "</tr>";
 						$("tbody#reply").append(html);
+						$(obj).parent().prev().find('input').val("");
 					}
 				});
 			<%}else{%>
@@ -201,17 +210,17 @@
 			
 			
 			if($(obj).val()=="수정"){
-				$(obj).parent().prev().html("<input type='text' value='"+$(obj).parent().prev().html()+"'>");
+				$(obj).parent().prev().prev().html("<input type='text' value='"+$(obj).parent().prev().prev().html()+"'>");
 				$(obj).val("저장");
 				$(obj).next().val("취소");
 			}else if($(obj).val()=="저장"){
-				console.log($(obj).parent().prev().children().first().val());
 				$.ajax({
 					url : "<%=request.getContextPath()%>/reply/modify.jsp",
 					type : "post",
-					data : "?ridx="+ridx+"&rcontent="+$(obj).parent().prev().children().first().val(),
+					data : "ridx="+ridx+"&rcontent="+$(obj).parent().prev().prev().find('input').val(),
 					success : function(){
-						$(obj).parent().prev().html($(obj).parent().prev().children().first().val());
+						$(obj).parent().prev().prev().html($(obj).parent().prev().prev().find('input').val());
+						$(obj).parent().prev().text("(수정됨)");
 						$(obj).val("수정");
 						$(obj).next().val("삭제");
 					}
@@ -219,17 +228,24 @@
 			}
 		}
 		function deleteReply(ridx,obj){
-			console.log(ridx+","+obj);
-			var YN = confirm("정말 삭제하시겠습니까?");
-			if(YN){
-				$.ajax({
-					url : "<%=request.getContextPath()%>/reply/deleteOk.jsp",
-					type : "post",
-					data : "ridx="+ridx,
-					success : function(){
-						$(obj).parent().parent().remove();
-					}
-				});
+			 if($(obj).val()=="삭제"){
+				var YN = confirm("정말 삭제하시겠습니까?");
+				if(YN){
+					$.ajax({
+						url : "<%=request.getContextPath()%>/reply/deleteOk.jsp",
+						type : "post",
+						data : "ridx="+ridx,
+						success : function(){
+							$(obj).parent().parent().find('.recon').text("삭제된 댓글입니다.");
+							$(obj).parent().prev().remove();
+							$(obj).parent().remove();
+						}
+					});
+				}
+			}else if($(obj).val()=="취소"){
+				$(obj).parent().prev().prev().html($(obj).parent().prev().prev().find('input').val());
+				$(obj).prev().val("수정");
+				$(obj).val("삭제");
 			}
 		}
 		

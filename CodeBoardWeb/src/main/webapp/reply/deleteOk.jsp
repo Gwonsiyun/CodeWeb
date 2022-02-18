@@ -3,9 +3,10 @@
 <%@ page import = "java.sql.*"%>
 <%@ page import="boardWeb.util.*" %>
 <%
-	//out.print("<script>alert('수정완료!')</script>");//삭제여부 물어보고싶
 	request.setCharacterEncoding("UTF-8");
-	String bidx = request.getParameter("bidx");
+	String ridx = request.getParameter("ridx");
+	
+	
 	
 	Connection conn = null;
 	PreparedStatement psmt =null;
@@ -15,18 +16,15 @@
 	try{
 		conn = DBManager.getConnection();
 		
-		String sql = " update board set delyn='Y' where bidx= "+bidx;
+		String sql = " update reply set delyn='Y' where ridx ="+ridx;
 		
 		psmt = conn.prepareStatement(sql);
 		
 		int result = psmt.executeUpdate();
 		
-		response.sendRedirect("list.jsp");
-		
 	}catch(Exception e){
 		e.printStackTrace();
 	}finally{
-		if(conn != null) conn.close();
-		if(psmt != null) psmt.close();
+		DBManager.close(psmt, conn);
 	}
 %>

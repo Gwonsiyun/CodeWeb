@@ -6,13 +6,15 @@ public class Reply {
 	private int bidx;
 	private String rcontent;
 	private String rdate;
-	private String membername; 
+	private String nickname; 
+	private String changeyn;
+	private String delyn;
 	
-	public String getMembername() {
-		return membername;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setMembername(String membername) {
-		this.membername = membername;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public int getRidx() {
 		return ridx;
@@ -44,4 +46,17 @@ public class Reply {
 	public void setRdate(String rdate) {
 		this.rdate = rdate;
 	}
+	public String getChangeyn() {
+		return changeyn;
+	}
+	public void setChangeyn(String changeyn) {
+		this.changeyn = changeyn;
+	}
+	public String getDelyn() {
+		return delyn;
+	}
+	public void setDelyn(String delyn) {
+		this.delyn = delyn;
+	}
+	
 }

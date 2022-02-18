@@ -8,14 +8,16 @@
 	Member login = (Member)session.getAttribute("loginUser");
 %>
 <%
-	String board_searchType= request.getParameter("board_searchType");
-	String post_searchType= request.getParameter("post_searchType");
+	String searchType= request.getParameter("searchType");
 	String searchVal= request.getParameter("searchVal");
 	String type_ = request.getParameter("type");
-	System.out.println(board_searchType);
-	System.out.println(post_searchType);
-	System.out.println(searchVal);
-	System.out.println(type_);
+	
+	
+	String nowPage= request.getParameter("nowPage");
+	int nowPageI = 1;
+	if(nowPage != null){
+		nowPageI = Integer.parseInt(nowPage);
+	}
 	
 	if(type_==null||type_==""){
 		type_="all";
@@ -31,59 +33,60 @@
 	
 	int count = 0;
 	
-	ArrayList<Board> board = new ArrayList<>();
+	
+	PagingUtil paging = null;
 	try{
 		conn = DBManager.getConnection();
 		String sql = "";
-		/* String sql = " select type_ from board a group by type_ ";
 		
+		if(type_!=null&&type_.equals("all")){
+			sql = "select count(*) as total from (SELECT ROWNUM r,b.* FROM board b where delyn = 'N' order by bidx desc) c";
+		}else if(type_!=null){
+			sql = " SELECT count(*) as total FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = '"+type_+"' and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
+		}
+		if(searchVal!=null && !searchVal.equals("") && !searchVal.equals("null")){
+			if(searchType.equals("title")){
+				sql += " where title like '%"+searchVal+"%'";
+			}else if(searchType.equals("nickname")){
+				sql += " where nickname like '%"+searchVal+"%'";
+			}else if(searchType.equals("title_content")){
+				sql += " where title like '%"+searchVal+"%' and content like '%"+searchVal+"%'";
+			}
+		}
 		psmt = conn.prepareStatement(sql);
 		rs = psmt.executeQuery();
 		
-		while(rs.next()){
-			board_type.add(rs.getString("type_"));
-			count++;
-		} */
-		if(board_searchType!=null){
-			sql = " SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
-			psmt = conn.prepareStatement(sql);
-			psmt.setString(1,board_searchType);
-		}else if(type_.equals("all")){
-			sql = "select c.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt from (SELECT ROWNUM r,b.* FROM board b where delyn = 'N' order by bidx desc) c";
-			psmt = conn.prepareStatement(sql);
-		}else{
-			sql = " SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM( SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = ? and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
-			
-			psmt = conn.prepareStatement(sql);
-			psmt.setString(1,type_);
-			
+		int total =0;
+		if(rs.next()){
+			total = rs.getInt("total");
 		}
-		if(post_searchType!=null && !post_searchType.equals("") && !post_searchType.equals("null")){
-			if(post_searchType.equals("title")){
-				sql += " where title like '%"+post_searchType+"%'";
-			}else if(post_searchType.equals("nickname")){
-				sql += " where nickname like '%"+post_searchType+"%'";
-			}else if(post_searchType.equals("title_content")){
-				sql += " where title like '%"+post_searchType+"%' and nickname like '%"+post_searchType+"%'";
+		
+		paging = new PagingUtil(total,nowPageI,5);
+		
+		sql = " select * from ";
+		sql += " (select rownum rrr , f.* from";
+		if(type_!=null&&type_.equals("all")){
+			sql += "(select c.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt from (SELECT ROWNUM r,b.* FROM board b where delyn = 'N' order by bidx desc) c";
+		}else if(type_!=null){
+			sql += "(SELECT e.*,TO_CHAR(createdDate,'YYYY-MM-DD') dt FROM (SELECT ROWNUM  rr, d.* FROM (SELECT c.* FROM (SELECT ROWNUM r , b.* FROM (select a.* from board a where type_ = '"+type_+"' and delyn='N' ORDER BY bidx) b ) c ORDER BY c.r desc) d)e";
+		}
+		if(searchVal!=null && !searchVal.equals("") && !searchVal.equals("null")){
+			if(searchType.equals("title")){
+				sql += " where title like '%"+searchVal+"%'";
+			}else if(searchType.equals("nickname")){
+				sql += " where nickname like '%"+searchVal+"%'";
+			}else if(searchType.equals("title_content")){
+				sql += " where title like '%"+searchVal+"%' and content like '%"+searchVal+"%'";
 			}
-			
 		}
+		
+		sql += " order by bidx desc ) f)";
+		sql += " where rrr>="+paging.getStart()+" and rrr<="+paging.getEnd(); 
+		
+		
+		psmt = conn.prepareStatement(sql);
+	
 		rs = psmt.executeQuery();
-		while(rs.next()){
-			Board temp = new Board();
-			temp.setBidx(rs.getInt("bidx"));
-			temp.setMidx(rs.getInt("midx"));
-			temp.setType(rs.getString("type_"));
-			temp.setTitle(rs.getString("title"));
-			temp.setContent(rs.getString("content"));
-			temp.setNickname(rs.getString("nickname"));
-			temp.setCreateddate(rs.getString("dt"));
-			temp.setRnum(rs.getInt("r"));
-			
-			
-			board.add(temp);
-			
-		}
 
 %>
 <!DOCTYPE html>
@@ -112,26 +115,9 @@
 	<%@ include file="/header.jsp" %>
 	<%@ include file="/nav.jsp" %>
 	<%@ include file="/route.jsp" %>
-	<section>
+	<section id="listPage_section">
 	<div id="search">
-		<form>
-			<%if(type_=="all"){ %>
-			<select name="board_searchType">
-				<option value="all">전체</option>
-				<%for(String type : board_type){%>
-				<option value="<%=type%>"><%=type%></option>
-				<% }%>
-			</select>
-			<%} %>
-			<select name="post_searchType">
-					<option value="all">전체</option>
-					<option value="title">제목</option>
-					<option value="title_content">제목+내용</option>
-					<option value="nickname">작성자</option>
-				</select>
-			<input type="text" name="type" size="30">
-			<button>검색</button>
-		</form>
+		<%@ include file="/search_form.jsp" %>
 	</div>
 	<table>
 		<thead>
@@ -143,17 +129,42 @@
 			</tr>
 		</thead>
 		<tbody>
-		<%for(Board b : board){%>
+		<%while(rs.next()){%>
 			<tr>
-				<td><%=b.getRnum() %></td>
-				<td><a href="view.jsp?bidx=<%=b.getBidx() %>&type=<%=b.getType()%>"><%=b.getTitle() %></a></td>
-				<td><%=b.getNickname() %></td>
-				<td><%=b.getCreateddate() %></td>
+				<td><%=rs.getInt("r") %></td>
+				<td><a href="view.jsp?bidx=<%=rs.getInt("bidx") %>&type=<%=rs.getString("type_")%>"><%=rs.getString("title") %></a></td>
+				<td><%=rs.getString("nickname") %></td>
+				<td><%=rs.getString("dt") %></td>
 			</tr>
 		<%}%>	
 		</tbody>
 	</table>
 	
+	<div id="pagingArea">
+		<%if(paging.getStartPage()>1){ %>
+			<a href="list.jsp?nowPage=<%=paging.getStartPage()-1%>&searchType=<%=searchType%>&searchVal=<%=searchVal%>">&lt;</a>
+			
+			
+		<%} %>	
+		
+		<%for(int i= paging.getStartPage(); i<=paging.getEndPage();i++){ 
+			if(i == paging.getNowPage()){
+		%>
+			<b><%= i %></b>
+		<% 		
+			}else{
+		%>
+			<a href="list.jsp?nowPage=<%=i%>&searchType=<%=searchType%>&searchVal=<%=searchVal%>"><%= i %></a>
+			<%} %>
+			
+		<%} %>
+		
+		<%if(paging.getEndPage() != paging.getLastPage()){ %>
+			<a href="list.jsp?nowPage=<%=paging.getStartPage()+1%>&searchType=<%=searchType%>&searchVal=<%=searchVal%>">&gt;</a>
+			
+			
+		<%} %>
+	</div>
 	
 		<%if(login != null){%>
 		<%if(type_.equals("NOTICE") && login.getGrade().equals("R")){ %>

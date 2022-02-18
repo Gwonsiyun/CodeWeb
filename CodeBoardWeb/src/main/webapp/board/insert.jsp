@@ -24,7 +24,7 @@
 	<section>
 		<h2>게시글 등록</h2>
 		<article>
-			<form action="insertOk.jsp?type=<%=type_%>" method="post">
+			<form action="insertOk.jsp" method="post">
 				<table border="1">
 					<tr>
 						<th>제목</th>

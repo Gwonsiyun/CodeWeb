@@ -57,24 +57,7 @@
 	<%@ include file="/header.jsp" %>
 	<%@ include file="/nav.jsp" %>
 	<section>
-		<div id="search">
-			<form action="<%=request.getContextPath()%>/board/list.jsp">
-				<select name="board_searchType">
-					<option value="all">전체</option>
-					<%for(String type : board_type){%>
-					<option value="<%=type%>"><%=type%></option>
-					<% }%>
-				</select>
-				<select name="post_searchType">
-					<option value="all">전체</option>
-					<option value="title">제목</option>
-					<option value="title_content">제목+내용</option>
-					<option value="nickname">작성자</option>
-				</select>
-				<input type="text" name="searchVal" size="30">
-				<button>검색</button>
-			</form>
-		</div>
+		<%@ include file="/search_form.jsp" %>
 		<div id="content">
 		<!-- 게시판타입마다 미니게시판을 만들어주고 게시판 이름 클릭시 해당하는 게시판으로 이동 -->
 		<%for(String type : board_type){%>

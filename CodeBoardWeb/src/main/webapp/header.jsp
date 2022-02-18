@@ -19,13 +19,13 @@
 		<div class="loginArea">
 			<a href="<%=request.getContextPath()%>/login/singOut.jsp">로그아웃</a>
 			|
-			<a href="<%=request.getContextPath()%>/login/myPage.jsp">관리자페이지</a>
+			<a href="<%=request.getContextPath()%>/myPage/myPage.jsp?type=관리자페이지">관리자페이지</a>
 		</div>
 		<%}else{%>
 		<div class="loginArea">
 			<a href="<%=request.getContextPath()%>/login/singOut.jsp">로그아웃</a>
 			|
-			<a href="<%=request.getContextPath()%>/login/myPage.jsp">마이페이지</a>
+			<a href="<%=request.getContextPath()%>/myPage/myPage.jsp?type=마이페이지">마이페이지</a>
 		</div>
 		<%} %>
 	<%} %>
