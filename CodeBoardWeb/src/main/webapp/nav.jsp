@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <nav>
 <div>
+	<div>&nbsp;<span>전체글</span>&nbsp;</div>
 	<div>&nbsp;<span>공지사항</span>&nbsp;</div>
 	<div>&nbsp;<span>HTML</span>&nbsp;</div>
 	<div>&nbsp;<span>CSS</span>&nbsp;</div>

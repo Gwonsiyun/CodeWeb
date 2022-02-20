@@ -9,6 +9,7 @@
 		<script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 		<script>
 			var checkid = false;
+			var checkid2 = false;
 			var checkpassword = false;
 			var checkpasswordre = false;
 			var checkname = false;
@@ -28,7 +29,7 @@
 				var span = $(obj).parent().children('.check');
 				var span2 = $(obj).parent().children('.check2');
 				switch(name){
-					case "id": reg = /^[a-z]+[a-z0-9]{5,15}/g; break;
+					case "id": reg = /^[a-z]+[a-z0-9]{4,14}/g; break;
 					case "password": reg = /^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/; break;
 					case "name": reg = /^[가-힣a-zA-Z]/g; break;
 					case "nickName": reg = /^[가-힣a-zA-Z]/g; break;
@@ -147,12 +148,49 @@
 				}
 			}
 			function singUp(){
+				console.log($('#id_check'));
 				if(!checkid||!checkpassword||!checkpasswordre||!checkname||!checkbirth||!checkemail||!checkphone){
 					$('.impor').blur();
+				}else if(!checkid2){
+					$('#id_check').click();
 				}else{
 					$('form').submmit();
 				}
 			}
+			function id_check_fn(obj){
+				var id=$('#id').val();
+				var span = $(obj).parent().children('.check');
+				if(id!=""){
+					$.ajax({
+	                  	url : "checkid.jsp",
+	                  	type : "get",
+	                  	data : "id="+id,
+	                 	success : function(data){
+							if(data!=0){
+								$(obj).prev().css({"border" : "3px solid red"});
+								span.text("중복이거나 탈퇴한 아이디입니다.");
+								span.css({"color" : "red", "display" : "inline"});
+								checkid2 = false;
+							}else if(data==0){
+								$(obj).prev().css({"border" : "3px solid green"});
+								span.text("회원가입 할 수 있는 아이디 입니다.");
+								span.css({"color" : "green", "display" : "inline"});
+								checkid2 = true;
+							}else{
+								console.log("알수없는 오류");
+								checkid2 = false;
+							}
+	                  	
+	                 	}
+	               });
+				}else{
+					$(obj).prev().css({"border" : "3px solid red"});
+					span.text("아이디는 비워둘 수 없습니다.");
+					span.css({"color" : "red", "display" : "inline"});
+					checkid2 = false;
+				}
+			}
+			
 			
 		</script>
 		
@@ -167,7 +205,7 @@
 				</div>
 				<div class="rows id">
 					<input type="text" class="id impor" name="id" id="id" placeholder="아이디를 입력하세요." onblur="checkFn(this)">
-					<input type="button" class="id" value="id 중복확인">
+					<input type="button" class="id" id="id_check" value="id 중복확인" onclick="id_check_fn(this)">
 					<span class="check"></span><br>
 					<span class="check2"></span>
 				</div>
@@ -213,7 +251,7 @@
 					<span class="check2"></span>
 				</div>
 				<div class="rows h">
-					<label for="gender">성별</label>
+					<label for="gender">성별<span class="red">*</span></label>
 				</div>
 				<div class="rows">
 					<input type="radio" name="gender" id="gender" value="m">남자

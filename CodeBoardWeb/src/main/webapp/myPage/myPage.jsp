@@ -10,7 +10,7 @@
 <body>
 	<%@ include file="/header.jsp" %>
 	<section id="myPage_section">
-	qwerew
+	test
 	</section>
 	<%@ include file="/footer.jsp" %>
 </body>

@@ -16,6 +16,7 @@
 	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
+	ResultSet rs = null;
 	
 	try{
 		conn = DBManager.getConnection();
@@ -30,15 +31,22 @@
 		psmt.setString(3,login.getNickname());
 		psmt.setInt(4,login.getMidx());
 		
-		int result = psmt.executeUpdate();
+		psmt.executeUpdate();
 		
-		response.sendRedirect("list.jsp");
+		sql = "SELECT MAX(bidx) FROM board";
+		psmt = conn.prepareStatement(sql);
+		rs = psmt.executeQuery();
+		
+		int max=0;
+		while(rs.next()){
+			max=rs.getInt("MAX(bidx)");
+		}
+		response.sendRedirect("view.jsp?bidx="+max+"&type="+type_);
 		
 	}catch(Exception e){
 		e.printStackTrace();
 	}finally{
-		if(conn != null) conn.close();
-		if(psmt != null) psmt.close();
+		DBManager.close(psmt,conn,rs);
 	}
 
 

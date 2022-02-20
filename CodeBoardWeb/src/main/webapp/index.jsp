@@ -4,6 +4,12 @@
 <%@ page import="boardWeb.util.*" %>
 <%@ page import="java.util.*" %>
 <%
+	String page_url = request.getRequestURL().toString();
+	session.setAttribute("page_url", page_url);
+	
+	String searchType= request.getParameter("searchType");
+	String searchVal= request.getParameter("searchVal");
+	String type_ = request.getParameter("type");
 	
 	Connection conn	= null;
 	PreparedStatement psmt = null;
@@ -57,12 +63,14 @@
 	<%@ include file="/header.jsp" %>
 	<%@ include file="/nav.jsp" %>
 	<section>
-		<%@ include file="/search_form.jsp" %>
+		<div id="search">
+			<%@ include file="/search_form.jsp" %>
+		</div>
 		<div id="content">
 		<!-- 게시판타입마다 미니게시판을 만들어주고 게시판 이름 클릭시 해당하는 게시판으로 이동 -->
 		<%for(String type : board_type){%>
 			<div class="miniBoard">
-				<div id="type"><%=type %></div>
+				<div id="type"><a href="<%=request.getContextPath()%>/board/list.jsp?type=<%=type %>"><%=type %></a></div>
 				<div id="miniBoard_content">
 				
 					<table>
@@ -103,7 +111,7 @@
 						<%for(Board b : miniBoard){%>
 							<tr>
 								<td><%=b.getRnum() %></td>
-								<td><%=b.getTitle() %></td>
+								<td><a href="<%=request.getContextPath()%>/board/view.jsp?bidx=<%=b.getBidx()%>&type=<%=b.getType()%>"><%=b.getTitle() %></a></td>
 								<td><%=b.getNickname() %></td>
 							<tr>
 						<% }%>

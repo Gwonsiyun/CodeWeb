@@ -4,9 +4,9 @@
 <%@ page import="boardWeb.util.*"%>
 <%@ page import="boardWeb.vo.*"%>
 <%
+	String page_url = (String)session.getAttribute("page_url");
 	String id = request.getParameter("id");
 	String pass = request.getParameter("pass");
-	
 	Connection conn = null;
 	PreparedStatement psmt = null;
 	ResultSet rs = null;
@@ -35,7 +35,7 @@
 		}
 		
 		if(m != null){
-			response.sendRedirect(request.getContextPath());
+			response.sendRedirect(page_url);
 		}else{
 			response.sendRedirect("singIn.jsp");
 		}

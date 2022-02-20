@@ -36,7 +36,7 @@
 						<select name="type">
 							<%for(String type : board_type){%>
 								<%if(!type.equals("NOTICE")||login.getGrade().equals("R")) {%>
-								<option value="<%=type%>"><%=type%></option>
+								<option value="<%=type%>"<%if(type_ != null && type_.equals(type)) out.print("selected");%>><%=type%></option>
 								<%} %>
 							<%}%>
 						</select>

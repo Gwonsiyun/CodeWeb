@@ -25,5 +25,11 @@ td>a{
 	font-weight: 700;
 }
 #miniBoard_content{
-	height: 350px;
+	height: 150px;
+}
+#miniBoard_content>table{
+	height: 100%;
+}
+#board tr{
+	height: 50px;
 }
